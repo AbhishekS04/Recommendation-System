@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { API_KEY } from "../App";
 import styled from "styled-components";
-import CloseButton from "./CloseButton"; // Ensure this path is correct
-import RecommendedMovies from "./RecommendedMovies"; // Import RecommendedMovies component
+import CloseButton from "./CloseButton";
 
 const Container = styled.div`
   display: flex;
@@ -115,8 +114,6 @@ const MovieInfoComponent = ({ selectedMovie, onClose }) => {
       ) : (
         "Loading..."
       )}
-      {/* Display recommended movies below the detailed information */}
-
     </Container>
   );
 };

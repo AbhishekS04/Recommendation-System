@@ -2,8 +2,6 @@
 
 Welcome to the **Movie Recommendation System**! This web application provides personalized movie recommendations based on user input, such as category and rating preferences. Developed using **React.js** with **Next.js**, it offers a dynamic and responsive user experience for exploring a vast selection of movies.
 
-![Movie Recommendation System](https://user-images.githubusercontent.com/your-image-link.png)
-
 ## 🌟 Key Features
 
 - **Instant Movie Search**: Quickly search for movies by title, with real-time results powered by the OMDb API.

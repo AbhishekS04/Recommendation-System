@@ -1,7 +1,3 @@
-Here’s an improved version of the README for the **Movie Recommendation System** project. This version includes accurate details about each section, more visuals, and easy-to-follow setup instructions.
-
----
-
 # 🎬 Movie Recommendation System
 
 Welcome to the **Movie Recommendation System**! This web application is designed to provide personalized movie recommendations. Built with **Next.js**, **React**, and **TypeScript**, it delivers an interactive and responsive user experience, allowing users to explore a variety of movies and customize their searches by category and rating.

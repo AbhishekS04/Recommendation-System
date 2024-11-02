@@ -118,7 +118,7 @@ This project is licensed under the MIT License. See the [LICENSE](./LICENSE) fil
 
 ## 📞 Contact
 
-For any inquiries, please reach out to the repository owner, Abhishek S., via GitHub at [@AbhishekS04](https://github.com/AbhishekS04).
+For any inquiries, please reach out to the repository owner, Abhishek Singh, via GitHub at [@AbhishekS04](https://github.com/AbhishekS04).
 
 ---
 

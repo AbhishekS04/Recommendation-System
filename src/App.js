@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Axios from "axios";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import MovieComponent from "./components/MovieComponent";
 import MovieInfoComponent from "./components/MovieInfoComponent";
 import RecommendedMovies from "./components/RecommendedMovies";
 
-
 export const API_KEY = 'ec6ae674';
+
+const theme = {
+  background: "#fff",
+  color: "#000",
+};
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 20px;
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.color};
+  min-height: 100vh;
 `;
 
 const AppName = styled.div`
-  color: black;
+  color: ${({ theme }) => theme.color};
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
 const Header = styled.div`
-  color: white;
+  color: ${({ theme }) => theme.color};
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -32,52 +40,30 @@ const Header = styled.div`
   font-weight: bold;
   width: 100%;
 `;
-const RecommendedMoviesHeader = styled.div`
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  width: 100%;
-  background-color: #333;
-  margin-top: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-    padding: 15px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-    padding: 10px;
-  }
-`;
 
 const SearchBox = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 10px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
-  margin-left: auto; 
-  width: 50%;
+  margin-left: auto;
+  width: 30%;
   background-color: white;
 
   @media (max-width: 768px) {
-    width: 70%;
-    margin-left: auto; /* Shift to the right */
+    width: 50%;
+    margin-left: auto;
   }
 
   @media (max-width: 480px) {
-    width: 90%;
-    margin-left: auto; /* Shift to the right */
+    width: 70%;
+    margin-left: auto;
   }
 `;
 
 const SearchIcon = styled.img`
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   transition: transform 0.3s ease;
 
@@ -86,18 +72,18 @@ const SearchIcon = styled.img`
   }
 
   @media (max-width: 480px) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
 const SearchInput = styled.input`
   color: black;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   border: none;
   outline: none;
-  margin-left: 15px;
+  margin-left: 10px;
   flex-grow: 1;
   transition: width 0.3s ease;
 
@@ -106,8 +92,8 @@ const SearchInput = styled.input`
   }
 
   @media (max-width: 480px) {
-    font-size: 14px;
-    margin-left: 10px;
+    font-size: 12px;
+    margin-left: 8px;
   }
 `;
 
@@ -154,12 +140,25 @@ function App() {
   const [movieList, updateMovieList] = useState([]);
   const [selectedMovie, onMovieSelect] = useState();
   const [timeoutId, updateTimeoutId] = useState();
+  const [filters, setFilters] = useState({ category: "", rating: "" });
+  const [FilterComponent, setFilterComponent] = useState(null);
+
+  useEffect(() => {
+    import("./components/FilterComponent").then((module) => {
+      setFilterComponent(() => module.default);
+    });
+  }, []);
 
   const fetchData = async (searchString) => {
-    const response = await Axios.get(
-      `https://www.omdbapi.com/?s=${searchString}&apikey=${API_KEY}`,
-    );
-    updateMovieList(response.data.Search);
+    try {
+      const response = await Axios.get(
+        `https://www.omdbapi.com/?s=${searchString}&apikey=${API_KEY}`,
+      );
+      updateMovieList(response.data.Search || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      updateMovieList([]);
+    }
   };
 
   const onTextChange = (e) => {
@@ -170,38 +169,64 @@ function App() {
     updateTimeoutId(timeout);
   };
 
+  const onFilterChange = (filterType, value) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: value,
+    }));
+  };
+
+  const filteredMovies = movieList.filter((movie) => {
+    const categoryMatch =
+      filters.category === "" ||
+      (filters.category === "bollywood" && movie.Country === "India") ||
+      (filters.category === "hollywood" && movie.Country !== "India") ||
+      (filters.category === "animation" && movie.Genre.includes("Animation")) ||
+      (filters.category === "documentary" && movie.Genre.includes("Documentary"));
+    const ratingMatch =
+      filters.rating === "" || parseFloat(movie.imdbRating) >= parseFloat(filters.rating);
+    return categoryMatch && ratingMatch;
+  });
+
   return (
-    <Container>
-      <Header>
-        <AppName>
-          <a href="/" style={{ textDecoration: 'none', color: 'white', display: 'flex', alignItems: 'center' }}>
-            <img className="header__icon" src="dsa.png" style={{ width: '90px', height: 'auto', marginRight: '10px' }} />
-          </a>
-          <span style={{ userSelect: 'none' }}>Movie App</span>
-        </AppName>
-        <SearchBox>
-          <SearchIcon src="search-icon.svg" alt="Search Icon" />
-          <SearchInput
-            placeholder="Search Movie"
-            value={searchQuery}
-            onChange={onTextChange}
-          />
-        </SearchBox>
-      </Header>
-      {selectedMovie && <MovieInfoComponent selectedMovie={selectedMovie} onMovieSelect={onMovieSelect} />}
-      <MovieListContainer>
-        {movieList?.length ? (
-          movieList.map((movie, index) => (
-            <MovieComponent
-              key={index}
-              movie={movie}
-              onMovieSelect={onMovieSelect}
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Header>
+          <AppName>
+            <a href="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+              <img className="header__icon" src="dsa.png" style={{ width: '90px', height: 'auto', marginRight: '10px' }} />
+            </a>
+            <span style={{ userSelect: 'none' }}>Movie App</span>
+          </AppName>
+          <SearchBox>
+            <SearchIcon src="search-icon.svg" alt="Search Icon" />
+            <SearchInput
+              placeholder="Search Movie"
+              value={searchQuery}
+              onChange={onTextChange}
             />
-          ))
-        ) : null}
-      </MovieListContainer>
-      <RecommendedMovies />
-    </Container>
+          </SearchBox>
+        </Header>
+        {movieList.length > 0 && FilterComponent && (
+          <Suspense fallback={<div>Loading...</div>}>
+            <FilterComponent onFilterChange={onFilterChange} />
+          </Suspense>
+        )}
+        {selectedMovie && <MovieInfoComponent selectedMovie={selectedMovie} onClose={() => onMovieSelect(null)} />}
+        <MovieListContainer>
+          {filteredMovies.length ? (
+            filteredMovies.map((movie, index) => (
+              <MovieComponent
+                key={index}
+                movie={movie}
+                onMovieSelect={onMovieSelect}
+              />
+            ))
+          ) : null}
+        </MovieListContainer>
+        <RecommendedMovies onMovieSelect={onMovieSelect} />
+      </Container>
+    </ThemeProvider>
   );
 }
 

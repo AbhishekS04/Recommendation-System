@@ -1,5 +1,4 @@
 
-
 🎬 Movie Recommendation System
 
 Welcome to the Movie Recommendation System! This web application provides personalized movie recommendations based on user input, such as category and rating preferences. Developed using React.js with Next.js, it offers a dynamic and responsive user experience for exploring a vast selection of movies.

@@ -58,10 +58,7 @@ NEXT_PUBLIC_OMDB_API_KEY=your_api_key_here
 
 Start the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+npm start
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000) to view the app.
@@ -123,3 +120,4 @@ For any inquiries, please reach out to the repository owner, Abhishek Singh, via
 ---
 
 Thank you for exploring the **Movie Recommendation System**! We look forward to your feedback and contributions. 🎥✨
+

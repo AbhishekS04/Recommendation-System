@@ -8,20 +8,23 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding: 20px 30px;
-  justify-content: center;
+  justify-content: flex-start; /* Align items to the start */
+  align-items: flex-start; /* Align items to the start */
   border-bottom: 1px solid lightgray;
   position: relative;
+  font-family: 'Rubik', sans-serif; /* Add this line */
 `;
 
 const CoverImage = styled.img`
   object-fit: cover;
   height: 350px;
+  margin-right: 20px; /* Add some space between the image and the info column */
 `;
 
 const InfoColumn = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  margin: 20px 0; /* Adjust margin to align with the poster */
 `;
 
 const MovieName = styled.span`
@@ -33,6 +36,7 @@ const MovieName = styled.span`
   overflow: hidden;
   text-transform: capitalize;
   text-overflow: ellipsis;
+  font-family: 'Rubik', sans-serif; /* Add this line */
   & span {
     opacity: 0.8;
   }
@@ -46,7 +50,7 @@ const MovieInfo = styled.span`
   margin: 4px 0;
   text-transform: capitalize;
   text-overflow: ellipsis;
-
+  font-family: 'Rubik', sans-serif; /* Add this line */
   & span {
     opacity: 0.5;
   }

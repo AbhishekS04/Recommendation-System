@@ -58,10 +58,7 @@ NEXT_PUBLIC_OMDB_API_KEY=your_api_key_here
 
 Start the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+npm start
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000) to view the app.
